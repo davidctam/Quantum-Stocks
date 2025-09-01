@@ -1,0 +1,991 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Quantum Portfolio Builder | Apple-Optimized</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #34495e;
+            --accent: #3498db;
+            --accent-dark: #2980b9;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --text: #333;
+            --text-light: #777;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+            --quantum-color: #9b59b6;
+            --quantum-dark: #8e44ad;
+            --quantum-light: #e8d6f3;
+            --safe-area-inset-top: env(safe-area-inset-top);
+            --safe-area-inset-bottom: env(safe-area-inset-bottom);
+            --safe-area-inset-left: env(safe-area-inset-left);
+            --safe-area-inset-right: env(safe-area-inset-right);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+            color: var(--text);
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: var(--safe-area-inset-top) var(--safe-area-inset-right) var(--safe-area-inset-bottom) var(--safe-area-inset-left);
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Improved header with Apple-style design */
+        header {
+            background: rgba(44, 62, 80, 0.9);
+            color: white;
+            padding: 20px 0;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: var(--card-shadow);
+            background-image: linear-gradient(135deg, var(--primary) 0%, var(--quantum-dark) 100%);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            font-size: clamp(20px, 5vw, 28px);
+            background: linear-gradient(45deg, var(--quantum-light), #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .logo-icon {
+            font-size: clamp(24px, 6vw, 32px);
+            color: var(--quantum-light);
+            animation: pulse 2s infinite;
+        }
+
+        /* Navigation optimized for both mobile and desktop */
+        .main-nav {
+            display: flex;
+            gap: 5px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 8px;
+            border-radius: 12px;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-item {
+            padding: 12px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 44px; /* Minimum touch target size for iOS */
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: var(--quantum-color);
+        }
+
+        /* Card design with Apple aesthetics */
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 25px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 15px;
+        }
+
+        .card-title {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: clamp(18px, 4vw, 20px);
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-icon {
+            background: var(--quantum-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        /* Stats grid optimized for both devices */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            background: rgba(155, 89, 182, 0.2);
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        .icon-1 { background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%); }
+        .icon-2 { background: linear-gradient(135deg, #3498db 0%, #2980b9 100%); }
+        .icon-3 { background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%); }
+        .icon-4 { background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%); }
+
+        .stat-info h3 {
+            font-size: clamp(18px, 4vw, 24px);
+            font-weight: 700;
+            color: white;
+        }
+
+        .stat-info p {
+            color: var(--quantum-light);
+            font-size: clamp(12px, 2.5vw, 14px);
+        }
+
+        /* Chart containers */
+        .chart-container {
+            height: 300px;
+            margin-top: 15px;
+        }
+
+        /* Controls optimized for touch and pointer devices */
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .control-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        label {
+            font-weight: 500;
+            color: white;
+            font-size: clamp(12px, 3vw, 14px);
+        }
+
+        select, input, button {
+            padding: 16px 15px; /* Increased padding for better touch targets */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+            font-size: clamp(14px, 3vw, 16px);
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            transition: var(--transition);
+            min-height: 44px; /* Minimum touch target size for iOS */
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: var(--quantum-color);
+            box-shadow: 0 0 0 2px rgba(155, 89, 182, 0.3);
+        }
+
+        button {
+            background: var(--quantum-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            background: var(--quantum-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--quantum-color), var(--accent));
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Action buttons with Apple-style design */
+        .action-buttons {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        /* Table improvements for mobile */
+        .table-container {
+            overflow-x: auto;
+            margin-top: 15px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            max-height: 400px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch; /* Smooth scrolling for iOS */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: clamp(12px, 2.5vw, 14px);
+        }
+
+        th {
+            background: rgba(0, 0, 0, 0.3);
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        tr:hover {
+            background: rgba(155, 89, 182, 0.1);
+        }
+
+        /* Tabs with Apple-style design */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 6px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+
+        .tab {
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 14px;
+            text-align: center;
+            flex: 1;
+            min-height: 44px; /* Minimum touch target size for iOS */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tab.active {
+            background: var(--quantum-color);
+            color: white;
+        }
+
+        /* Tooltip improvements */
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 200px;
+            background-color: rgba(44, 62, 80, 0.95);
+            color: white;
+            text-align: center;
+            border-radius: 6px;
+            padding: 10px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Footer improvements */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--text-light);
+            font-size: 14px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Notification system */
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            border-radius: 12px;
+            background: var(--success);
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            background: var(--danger);
+        }
+
+        .notification.warning {
+            background: var(--warning);
+        }
+
+        /* Dynamic Island and notch safe area for iPhone */
+        @supports (padding: max(0px)) {
+            .container {
+                padding-left: max(20px, env(safe-area-inset-left));
+                padding-right: max(20px, env(safe-area-inset-right));
+            }
+        }
+
+        /* Hide elements on mobile for better experience */
+        .mobile-hidden {
+            display: none;
+        }
+
+        /* Touch device optimizations */
+        @media (hover: none) and (pointer: coarse) {
+            .card:hover {
+                transform: none;
+            }
+            
+            .stat-card:hover {
+                transform: none;
+            }
+            
+            button:hover {
+                transform: none;
+            }
+            
+            .nav-item:hover {
+                background: transparent;
+            }
+            
+            .nav-item.active {
+                background: var(--quantum-color);
+            }
+        }
+
+        /* Media queries for responsive design */
+        @media (min-width: 768px) {
+            .mobile-hidden {
+                display: flex;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .main-nav {
+                width: 100%;
+                overflow-x: auto;
+                padding: 6px;
+            }
+            
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .card {
+                padding: 20px;
+            }
+        }
+
+        /* Animation improvements */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        /* MacBook Pro specific optimizations */
+        @media (min-width: 1440px) {
+            body {
+                font-size: 16px;
+            }
+            
+            .container {
+                padding: 30px;
+            }
+            
+            .card {
+                padding: 30px;
+            }
+            
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        /* High-resolution (Retina) displays */
+        @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+            .card {
+                border: 0.5px solid rgba(255, 255, 255, 0.1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span id="notification-text"></span>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-atom"></i>
+                    </div>
+                    <h1>Quantum Portfolio Builder</h1>
+                </div>
+                
+                <nav class="main-nav">
+                    <div class="nav-item active">
+                        <i class="fas fa-chart-pie"></i>
+                        <span class="mobile-hidden">Portfolio</span>
+                    </div>
+                    <div class="nav-item">
+                        <i class="fas fa-robot"></i>
+                        <span class="mobile-hidden">Strategies</span>
+                    </div>
+                    <div class="nav-item">
+                        <i class="fas fa-calculator"></i>
+                        <span class="mobile-hidden">Analysis</span>
+                    </div>
+                    <div class="nav-item">
+                        <i class="fas fa-cog"></i>
+                        <span class="mobile-hidden">Settings</span>
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <div class="card-icon">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    Portfolio Overview
+                </h2>
+                <div class="tooltip">
+                    <i class="fas fa-info-circle"></i>
+                    <span class="tooltip-text">View your current portfolio allocation and performance metrics</span>
+                </div>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon icon-1">
+                        <i class="fas fa-dollar-sign"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>$125,430</h3>
+                        <p>Total Value</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon icon-2">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>+18.5%</h3>
+                        <p>Total Return</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon icon-3">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>84/100</h3>
+                        <p>Diversification Score</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon icon-4">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Medium</h3>
+                        <p>Risk Level</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chart-container">
+                <canvas id="allocation-chart"></canvas>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <div class="card-icon">
+                        <i class="fas fa-sliders-h"></i>
+                    </div>
+                    Portfolio Builder
+                </h2>
+                <div class="tooltip">
+                    <i class="fas fa-info-circle"></i>
+                    <span class="tooltip-text">Adjust your portfolio allocation and investment strategy</span>
+                </div>
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active">Quick Build</div>
+                <div class="tab">Advanced</div>
+                <div class="tab">VC Funds</div>
+                <div class="tab">Secondary Markets</div>
+            </div>
+            
+            <div class="controls-grid">
+                <div class="control-group">
+                    <div class="control-label">
+                        <label for="portfolio-size">Portfolio Size</label>
+                        <span class="tooltip">
+                            <i class="fas fa-question-circle" style="color: var(--quantum-light); font-size: 12px;"></i>
+                            <span class="tooltip-text">Set your total investment amount</span>
+                        </span>
+                    </div>
+                    <input type="number" id="portfolio-size" value="100000" step="10000">
+                </div>
+                
+                <div class="control-group">
+                    <div class="control-label">
+                        <label for="risk-profile">Risk Profile</label>
+                        <span class="tooltip">
+                            <i class="fas fa-question-circle" style="color: var(--quantum-light); font-size: 12px;"></i>
+                            <span class="tooltip-text">Choose your risk tolerance level</span>
+                        </span>
+                    </div>
+                    <select id="risk-profile">
+                        <option value="conservative">Conservative</option>
+                        <option value="balanced" selected>Balanced</option>
+                        <option value="aggressive">Aggressive</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <div class="control-label">
+                        <label for="strategy">Investment Strategy</label>
+                        <span class="tooltip">
+                            <i class="fas fa-question-circle" style="color: var(--quantum-light); font-size: 12px;"></i>
+                            <span class="tooltip-text">Select your portfolio construction approach</span>
+                        </span>
+                    </div>
+                    <select id="strategy">
+                        <option value="market-cap">Market Cap Weighted</option>
+                        <option value="equal-weight">Equal Weight</option>
+                        <option value="risk-parity">Risk Parity</option>
+                    </select>
+                </div>
+                
+                <div class="control-group">
+                    <div class="control-label">
+                        <label for="rebalancing">Rebalancing Frequency</label>
+                        <span class="tooltip">
+                            <i class="fas fa-question-circle" style="color: var(--quantum-light); font-size: 12px;"></i>
+                            <span class="tooltip-text">How often to rebalance your portfolio</span>
+                        </span>
+                    </div>
+                    <select id="rebalancing">
+                        <option value="quarterly">Quarterly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="annually">Annually</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="btn-primary">
+                    <i class="fas fa-cogs"></i> Generate Portfolio
+                </button>
+                <button class="btn-secondary">
+                    <i class="fas fa-sync-alt"></i> Rebalance
+                </button>
+                <button class="btn-secondary">
+                    <i class="fas fa-download"></i> Export
+                </button>
+                <button class="btn-secondary">
+                    <i class="fas fa-save"></i> Save
+                </button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">
+                    <div class="card-icon">
+                        <i class="fas fa-list-ul"></i>
+                    </div>
+                    Portfolio Composition
+                </h2>
+                <div class="tooltip">
+                    <i class="fas fa-info-circle"></i>
+                    <span class="tooltip-text">Detailed view of your current holdings and allocations</span>
+                </div>
+            </div>
+            
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Asset</th>
+                            <th>Type</th>
+                            <th>Allocation</th>
+                            <th>Value</th>
+                            <th>Return</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>IBM</td>
+                            <td>Quantum Hardware</td>
+                            <td>12.5%</td>
+                            <td>$15,678</td>
+                            <td style="color: var(--success);">+8.2%</td>
+                            <td>
+                                <button style="padding: 8px 12px; font-size: 12px; min-height: auto;">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Google</td>
+                            <td>Quantum AI</td>
+                            <td>10.8%</td>
+                            <td>$13,545</td>
+                            <td style="color: var(--success);">+15.7%</td>
+                            <td>
+                                <button style="padding: 8px 12px; font-size: 12px; min-height: auto;">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>IonQ</td>
+                            <td>Quantum Computing</td>
+                            <td>8.2%</td>
+                            <td>$10,285</td>
+                            <td style="color: var(--success);">+22.4%</td>
+                            <td>
+                                <button style="padding: 8px 12px; font-size: 12px; min-height: auto;">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Quantum Fund V</td>
+                            <td>VC Fund</td>
+                            <td>15.0%</td>
+                            <td>$18,814</td>
+                            <td style="color: var(--warning);">+2.3%</td>
+                            <td>
+                                <button style="padding: 8px 12px; font-size: 12px; min-height: auto;">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Microsoft</td>
+                            <td>Quantum Software</td>
+                            <td>9.5%</td>
+                            <td>$11,915</td>
+                            <td style="color: var(--success);">+12.6%</td>
+                            <td>
+                                <button style="padding: 8px 12px; font-size: 12px; min-height: auto;">
+                                    <i class="fas fa-exchange-alt"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <footer>
+            <p>Quantum Portfolio Builder &copy; 2023 | Optimized for Apple Devices</p>
+            <p>This interface is for demonstration purposes only. Not financial advice.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Initialize charts
+        document.addEventListener('DOMContentLoaded', function() {
+            // Allocation Chart
+            const allocationChart = new Chart(document.getElementById('allocation-chart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Quantum Hardware', 'Quantum Software', 'VC Funds', 'Quantum AI', 'Secondary Markets'],
+                    datasets: [{
+                        data: [25, 20, 15, 22, 18],
+                        backgroundColor: [
+                            '#9b59b6',
+                            '#3498db',
+                            '#2ecc71',
+                            '#e74c3c',
+                            '#f39c12'
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: 'white',
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Add tab functionality
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    showNotification('Viewing ' + tab.textContent + ' options');
+                });
+            });
+
+            // Add nav item functionality
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    navItems.forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    
+                    // Show notification
+                    showNotification('Navigating to ' + item.querySelector('span').textContent);
+                });
+            });
+
+            // Add button functionality
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(button => {
+                button.addEventListener('click', () => {
+                    button.classList.add('fade-in');
+                    setTimeout(() => {
+                        button.classList.remove('fade-in');
+                    }, 500);
+                    
+                    if (button.textContent.includes('Generate')) {
+                        showNotification('Generating optimized portfolio...');
+                    } else if (button.textContent.includes('Rebalance')) {
+                        showNotification('Rebalancing portfolio...');
+                    } else if (button.textContent.includes('Export')) {
+                        showNotification('Exporting portfolio data...');
+                    } else if (button.textContent.includes('Save')) {
+                        showNotification('Portfolio saved successfully!');
+                    }
+                });
+            });
+
+            // Handle form elements
+            const formElements = document.querySelectorAll('select, input');
+            formElements.forEach(element => {
+                element.addEventListener('focus', () => {
+                    element.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
+                });
+                
+                element.addEventListener('blur', () => {
+                    element.style.backgroundColor = 'rgba(0, 0, 0, 0.2)';
+                });
+            });
+
+            // Check if on iOS device
+            function isIOS() {
+                return [
+                    'iPad Simulator',
+                    'iPhone Simulator',
+                    'iPod Simulator',
+                    'iPad',
+                    'iPhone',
+                    'iPod'
+                ].includes(navigator.platform) || (navigator.userAgent.includes("Mac") && "ontouchend" in document);
+            }
+
+            // Add iOS specific class for additional styling
+            if (isIOS()) {
+                document.body.classList.add('ios-device');
+            }
+
+            // Check if on Mac
+            function isMac() {
+                return navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+            }
+
+            // Add Mac specific class for additional styling
+            if (isMac() && !isIOS()) {
+                document.body.classList.add('mac-device');
+            }
+        });
+
+        // Notification function
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notification-text');
+            
+            notificationText.textContent = message;
+            notification.className = 'notification show ' + type;
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
